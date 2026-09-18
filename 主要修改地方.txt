@@ -1,0 +1,53 @@
+涉及到的修改位置
+1.app module
+2.dana module
+3.plugins/constraints module->SignatureVerifierPlugin文件。
+4.danars module
+要点：
+app module->di/PluginsListModule 中注册胰岛素泵插件
+danar module->di/DanaModule 必需需包含 ZhiKaiFragment
+danars module->di/DanaRSModule 必需需包含 ZhiKaiServiceModule
+
+注射：ZhiKaiPlugin deliverTreatment函数
+
+
+首页xml文件地址：
+    首页右上方菜单：
+       app module ->menu/menu_main.xml
+    首页左边菜单
+    手动操作页面：plugins/main module ->actions_fragment
+    目标-页面地址 ：plugins/constraints module->ObjectivesFragment
+    首页布局文件：plugins/main module ->main/layout/overview_fragment iob活性胰岛素数据更新函数：updateIobCob()
+    1.中间大图标
+       布局文件地址：
+            ui module->/main/res/layout/widget_layout 错误
+            plugins/main module->/main/res/layout/overview_info_layout 正确
+       各图标含义：
+            IOB活性胰岛素
+            碳水化合物
+            基础率  来自配置文件的设置，如果没有则取泵的基础率数据
+            上次自动感应数据 与泵无关
+    2.首页小图标
+        布局文件地址：
+            plugins/main module->/main/res/layout/overview_statuslights_layout
+        各图标含义：
+            输注导管(上次连接时的储液罐液位[胰岛素单位])
+            胰岛素(年龄 剩余) 年龄和剩余在手动操作 prim/fill后显示
+            传感器(年龄) 年龄在手动操纵insert后开始计算
+            泵电池(年龄 电量剩余)  年龄在手动操作 change后开始计算
+
+配置文件一些值的计算：IC = 碳水化合物/胰岛素
+                  ISF = (实际血糖-目标血糖)/胰岛素
+                  胰岛素 = 碳水化合物/IC+ISF
+//UI module
+胰岛素注射dialog  InsulinDialog
+//UI module
+计算器(大剂量向导)dialog  WizardDialog
+泵信息页：pump/dana module->/man/java/info.nightscout.pump.dana/ZhiKaiFragment
+版本警告修改位置：plugins/constrants module -->VersionCheckerPlugin
+
+闭环 diaglog页面：ui module->main/layout/dialog_loop
+显示碳化物: 需要在 openaps smb 插件选项中开启“在输入碳水化合物后启用SMB”
+官方文档地址：https://androidaps.readthedocs.io/en/latest/
+
+
